@@ -1,0 +1,28 @@
+name: Build Windows Application
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Python 3.10
+      uses: actions/setup-python@v3
+      with:
+        python-version: '3.10'
+    
+    - name: Install dependencies
+      run: |
+        pip install pyinstaller
+    
+    - name: Build executable
+      run: |
+        pyinstaller --onefile --add-data "flower_template_1.png;." --add-data "flower_template_2.png;." --add-data "flower_template_3.png;." --add-data "flower_template_4.png;." --add-data "flower_template_5.png;." --add-data "flower_template_6.png;." --add-data "ice_template_1.png;." --add-data "ice_template_2.png;." --add-data "ice_template_3.png;." --add-data "bomb_template_1.png;." --add-data "bomb_template_2.png;." --add-data "bomb_template_3.png;." --add-data "play_button_template.png;." --add-data "home.png;." --add-data "play_home.png;." main.py
+    
+    - name: Upload executable
+      uses: actions/upload-artifact@v3
+      with:
+        name: my-application
+        path: dist/main.exe
