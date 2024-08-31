@@ -4,6 +4,15 @@ import cv2
 import numpy as np
 import pyautogui
 import time
+import signal
+import sys
+
+def signal_handler(sig, frame):
+    print("Exiting application...")
+    sys.exit(0)
+
+signal.signal(signal.SIGINT, signal_handler)
+signal.signal(signal.SIGTERM, signal_handler)
 
 if getattr(sys, 'frozen', False):
     base_path = sys._MEIPASS
