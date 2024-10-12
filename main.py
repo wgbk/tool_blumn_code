@@ -6,6 +6,7 @@ import pyautogui
 import time
 import signal
 import sys
+import random
 
 def signal_handler(sig, frame):
     print("Exiting application...")
@@ -27,6 +28,7 @@ TOP = (SCREEN_HEIGHT - REGION_HEIGHT) // 2
 flower_templates = [cv2.imread(os.path.join(base_path, f'flower_template_{i}.png'), 0) for i in range(1, 6)]
 ice_templates = [cv2.imread(os.path.join(base_path, f'ice_template_{i}.png'), 0) for i in range(1, 3)]
 bomb_templates = [cv2.imread(os.path.join(base_path, f'bomb_template_{i}.png'), 0) for i in range(1, 3)]
+dogs_templates = [cv2.imread(os.path.join(base_path, f'dogs_template_{i}.png'), 0) for i in range(1, 2)]
 play_button_template = cv2.imread(os.path.join(base_path, 'play_button_template.png'), 0)
 home_template = cv2.imread(os.path.join(base_path, 'home.png'), 0)
 play_home_template = cv2.imread(os.path.join(base_path, 'play_home.png'), 0)
@@ -72,7 +74,7 @@ def click_center_screen():
     pyautogui.click(center_x, center_y)
 
 def scroll_down():
-    pyautogui.scroll(-5000)
+    pyautogui.scroll(-1000)
 
 print("Application is running...")
 
@@ -81,7 +83,7 @@ while True:
     home_position = find_template_position(home_template, screenshot_gray)
     if home_position:
         scroll_down()
-        time.sleep(1)
+        time.sleep(random.uniform(1, 2))
         play_home_position = find_template_position(play_home_template, screenshot_gray)
         if play_home_position:
             click_position(play_home_position)
@@ -92,13 +94,20 @@ while True:
         click_position(ice_position)
         continue
     
+    dogs_position = find_template_position(dogs_templates, screenshot_gray)
+    if dogs_position:
+        click_position(dogs_position)
+        continue
+
     bomb_position = find_template_position(bomb_templates, screenshot_gray, threshold=0.9)
     if not bomb_position:
         flower_position = find_template_position(flower_templates, screenshot_gray)
         if flower_position:
             click_position(flower_position)
+            continue
     
     play_button_position = find_template_position(play_button_template, screenshot_gray)
     if play_button_position:
         click_center_screen()
+        time.sleep(random.uniform(1, 2))
         click_position(play_button_position)
